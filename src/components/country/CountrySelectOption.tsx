@@ -1,4 +1,5 @@
 import { OptionProps, components } from "react-select";
+import { CountrySelectData } from "./CountrySelect";
 
 /* --- [TASK] ---
 Country flags in select field
@@ -20,7 +21,9 @@ FURTHER DETAILS
 --- [TASK] --- */
 
 // Component
-export const CountrySelectOption = (props: OptionProps<any>) => {
+export const CountrySelectOption = (
+  props: OptionProps<CountrySelectData, false>
+) => {
   return (
     <div>
       <components.Option {...props} />
