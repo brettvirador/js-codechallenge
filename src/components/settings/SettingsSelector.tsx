@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import Modal from "react-modal";
 import CountrySelect, { DEFAULT_COUNTRY } from "../country/CountrySelect";
 import LanguageSelect, { DEFAULT_LANGUAGE } from "../language/LanguageSelect";
@@ -21,7 +21,7 @@ FURTHER DETAILS
 - Positioning of the buttons within the modal is not in the scope of this task
 --- [TASK] --- */
 
-/* --- [TASK] ---
+/* --- [TASK: DONE] ---
 Reduced number of unnecessary re-renders
 
 CURRENT SCENARIO
@@ -136,7 +136,7 @@ const SettingsSelector = (): JSX.Element => {
     setModalIsOpen(false);
   };
 
-  const button = () => {
+  const button = useMemo(() => {
     // Increase render count.
     counter.current++;
 
@@ -149,12 +149,12 @@ const SettingsSelector = (): JSX.Element => {
         {values.country.name} - ({values.currency} - {values.language})
       </button>
     );
-  };
+  }, [values]);
 
   // Render
   return (
     <div>
-      {button()}
+      {button}
 
       {/* Modal */}
       <Modal isOpen={modalIsOpen}>
