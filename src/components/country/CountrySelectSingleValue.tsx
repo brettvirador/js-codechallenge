@@ -1,4 +1,4 @@
-import { OptionProps, components } from "react-select";
+import { SingleValueProps, components } from "react-select";
 import { CountrySelectData } from "./CountrySelect";
 
 /* --- [TASK: DONE] ---
@@ -21,14 +21,14 @@ FURTHER DETAILS
 --- [TASK] --- */
 
 // Component
-export const CountrySelectOption = (
-  props: OptionProps<CountrySelectData, false>
+export const CountrySelectSingleValue = (
+  props: SingleValueProps<CountrySelectData, false>
 ) => {
   const { children, ...rest } = props;
-  const { code, name } = props.data.value;
+  const { code, name } = props.getValue()[0].value;
 
   return (
-    <components.Option {...rest}>
+    <components.SingleValue {...rest}>
       <div
         style={{
           display: "flex",
@@ -37,7 +37,6 @@ export const CountrySelectOption = (
         }}
       >
         <img
-          className="country-select-option-image"
           src={`https://catamphetamine.gitlab.io/country-flag-icons/3x2/${code}.svg`}
           alt={name}
           style={{
@@ -47,6 +46,6 @@ export const CountrySelectOption = (
         />
         <span>{children}</span>
       </div>
-    </components.Option>
+    </components.SingleValue>
   );
 };

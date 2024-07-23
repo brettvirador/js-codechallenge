@@ -1,6 +1,7 @@
 import countries from "i18n-iso-countries";
 import Select from "react-select";
 import { CountrySelectOption } from "./CountrySelectOption";
+import { CountrySelectSingleValue } from "./CountrySelectSingleValue";
 
 // Register countries
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
@@ -53,7 +54,10 @@ export const CountrySelect = ({
         Country
         <Select
           options={data}
-          components={{ Option: CountrySelectOption }}
+          components={{
+            Option: CountrySelectOption,
+            SingleValue: CountrySelectSingleValue,
+          }}
           defaultValue={defaultValue}
           onChange={(newValue) => {
             if (onChange && newValue) onChange(newValue.value);
