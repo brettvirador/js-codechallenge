@@ -3,9 +3,11 @@ import ISO_6391_Languages from "iso-639-1";
 import Select from "react-select";
 
 // Props
-interface LanguageSelectProps {
-  language?: string;
-  onChange?: (language: string) => void;
+export type LanguageSelectValue = string;
+
+export interface LanguageSelectProps {
+  language?: LanguageSelectValue;
+  onChange?: (language: LanguageSelectValue) => void;
 }
 
 // Constants
@@ -41,7 +43,7 @@ const LanguageSelect = ({
           options={data}
           defaultValue={defaultValue}
           onChange={(newValue) => {
-            onChange(newValue.value);
+            onChange?.(newValue?.value || "");
           }}
         />
       </label>

@@ -1,8 +1,17 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useReducer, useRef, useState } from "react";
 import Modal from "react-modal";
-import CountrySelect, { DEFAULT_COUNTRY } from "../country/CountrySelect";
-import LanguageSelect, { DEFAULT_LANGUAGE } from "../language/LanguageSelect";
-import CurrencySelect, { DEFAULT_CURRENCY } from "../currency/CurrencySelect";
+import CountrySelect, {
+  CountrySelectValue,
+  DEFAULT_COUNTRY,
+} from "../country/CountrySelect";
+import LanguageSelect, {
+  DEFAULT_LANGUAGE,
+  LanguageSelectValue,
+} from "../language/LanguageSelect";
+import CurrencySelect, {
+  CurrencySelectValue,
+  DEFAULT_CURRENCY,
+} from "../currency/CurrencySelect";
 
 /* --- [TASK: DONE] ---
 Changes on modal are only applied on SAVE
@@ -53,7 +62,7 @@ FURTHER DETAILS
 - Bonus points awarded for aesthetically appealing re-design of elements.
 --- [TASK] --- */
 
-/* --- [TASK] ---
+/* --- [TASK: DONE] ---
 Improved use of TypeScript
 
 CURRENT SCENARIO
@@ -93,22 +102,49 @@ FURTHER DETAILS
 - Downgrading to React 17 is not an option 😉
 --- [TASK] --- */
 
+// Types
+type State = {
+  country: CountrySelectValue;
+  currency: CurrencySelectValue;
+  language: LanguageSelectValue;
+};
+
+type Action =
+  | { type: "SET_COUNTRY"; payload: CountrySelectValue }
+  | { type: "SET_CURRENCY"; payload: CurrencySelectValue }
+  | { type: "SET_LANGUAGE"; payload: LanguageSelectValue }
+  | { type: "ALL"; payload: State };
+
+const initialState: State = {
+  country: DEFAULT_COUNTRY,
+  currency: DEFAULT_CURRENCY,
+  language: DEFAULT_LANGUAGE,
+};
+
+const reducer = (state: State, action: Action): State => {
+  switch (action.type) {
+    case "SET_COUNTRY":
+      return { ...state, country: action.payload };
+    case "SET_CURRENCY":
+      return { ...state, currency: action.payload };
+    case "SET_LANGUAGE":
+      return { ...state, language: action.payload };
+    case "ALL":
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 // Component
 const SettingsSelector = (): JSX.Element => {
   // States
-  const [modalIsOpen, setModalIsOpen] = React.useState<any>(false);
-  const [selectedCountry, setCountry] = React.useState<any>(DEFAULT_COUNTRY);
-  const [selectedCurrency, setCurrency] = React.useState<any>(DEFAULT_CURRENCY);
-  const [selectedLanguage, setLanguage] = React.useState<any>(DEFAULT_LANGUAGE);
-  const [values, setValues] = useState<{
-    country: any;
-    currency: any;
-    language: any;
-  }>({
-    country: DEFAULT_COUNTRY,
-    currency: DEFAULT_CURRENCY,
-    language: DEFAULT_LANGUAGE,
-  });
+  const [modalIsOpen, setModalIsOpen] = React.useState<boolean>(false);
+  const [selectedValues, dispatchSelectedValues] = useReducer(
+    reducer,
+    initialState
+  );
+  const [finalValues, dispatchFinalValues] = useReducer(reducer, initialState);
 
   // Render Counter
   const counter = useRef(0);
@@ -119,18 +155,26 @@ const SettingsSelector = (): JSX.Element => {
   };
   const handleCancel = () => {
     // reset "form"
-    setCountry(values.country);
-    setCurrency(values.currency);
-    setLanguage(values.language);
+    dispatchSelectedValues({
+      type: "ALL",
+      payload: {
+        country: finalValues.country,
+        currency: finalValues.currency,
+        language: finalValues.language,
+      },
+    });
     // close modal
     setModalIsOpen(false);
   };
   const handleSave = () => {
     // set "form"
-    setValues({
-      country: selectedCountry,
-      currency: selectedCurrency,
-      language: selectedLanguage,
+    dispatchFinalValues({
+      type: "ALL",
+      payload: {
+        country: selectedValues.country,
+        currency: selectedValues.currency,
+        language: selectedValues.language,
+      },
     });
     // close modal
     setModalIsOpen(false);
@@ -146,10 +190,11 @@ const SettingsSelector = (): JSX.Element => {
     /* Button */
     return (
       <button onClick={handleOpen}>
-        {values.country.name} - ({values.currency} - {values.language})
+        {finalValues.country.name} - ({finalValues.currency} -{" "}
+        {finalValues.language})
       </button>
     );
-  }, [values]);
+  }, [finalValues]);
 
   // Render
   return (
@@ -162,13 +207,28 @@ const SettingsSelector = (): JSX.Element => {
         <h2>Select your region, currency and language.</h2>
 
         {/* Country */}
-        <CountrySelect value={selectedCountry} onChange={setCountry} />
+        <CountrySelect
+          value={selectedValues.country}
+          onChange={(value) =>
+            dispatchSelectedValues({ type: "SET_COUNTRY", payload: value })
+          }
+        />
 
         {/* Currency */}
-        <CurrencySelect value={selectedCurrency} onChange={setCurrency} />
+        <CurrencySelect
+          value={selectedValues.currency}
+          onChange={(value) =>
+            dispatchSelectedValues({ type: "SET_CURRENCY", payload: value })
+          }
+        />
 
         {/* Language */}
-        <LanguageSelect language={selectedLanguage} onChange={setLanguage} />
+        <LanguageSelect
+          language={selectedValues.language}
+          onChange={(value) =>
+            dispatchSelectedValues({ type: "SET_LANGUAGE", payload: value })
+          }
+        />
 
         {/* Cancel button */}
         <button onClick={handleCancel}>Cancel</button>

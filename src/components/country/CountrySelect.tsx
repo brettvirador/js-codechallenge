@@ -20,7 +20,7 @@ export type CountrySelectData = {
   value: CountrySelectValue;
 };
 
-interface CountrySelectProps {
+export interface CountrySelectProps {
   value?: CountrySelectValue;
   onChange?: (value: CountrySelectValue) => void;
 }
