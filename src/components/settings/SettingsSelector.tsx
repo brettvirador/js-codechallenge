@@ -1,10 +1,10 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Modal from "react-modal";
 import CountrySelect, { DEFAULT_COUNTRY } from "../country/CountrySelect";
 import LanguageSelect, { DEFAULT_LANGUAGE } from "../language/LanguageSelect";
 import CurrencySelect, { DEFAULT_CURRENCY } from "../currency/CurrencySelect";
 
-/* --- [TASK] ---
+/* --- [TASK: DONE] ---
 Changes on modal are only applied on SAVE
 
 CURRENT SCENARIO
@@ -100,6 +100,15 @@ const SettingsSelector = (): JSX.Element => {
   const [selectedCountry, setCountry] = React.useState<any>(DEFAULT_COUNTRY);
   const [selectedCurrency, setCurrency] = React.useState<any>(DEFAULT_CURRENCY);
   const [selectedLanguage, setLanguage] = React.useState<any>(DEFAULT_LANGUAGE);
+  const [values, setValues] = useState<{
+    country: any;
+    currency: any;
+    language: any;
+  }>({
+    country: DEFAULT_COUNTRY,
+    currency: DEFAULT_CURRENCY,
+    language: DEFAULT_LANGUAGE,
+  });
 
   // Render Counter
   const counter = useRef(0);
@@ -108,7 +117,22 @@ const SettingsSelector = (): JSX.Element => {
   const handleOpen = () => {
     setModalIsOpen(true);
   };
-  const handleClose = () => {
+  const handleCancel = () => {
+    // reset "form"
+    setCountry(values.country);
+    setCurrency(values.currency);
+    setLanguage(values.language);
+    // close modal
+    setModalIsOpen(false);
+  };
+  const handleSave = () => {
+    // set "form"
+    setValues({
+      country: selectedCountry,
+      currency: selectedCurrency,
+      language: selectedLanguage,
+    });
+    // close modal
     setModalIsOpen(false);
   };
 
@@ -122,7 +146,7 @@ const SettingsSelector = (): JSX.Element => {
     /* Button */
     return (
       <button onClick={handleOpen}>
-        {selectedCountry.name} - ({selectedCurrency} - {selectedLanguage})
+        {values.country.name} - ({values.currency} - {values.language})
       </button>
     );
   };
@@ -146,8 +170,10 @@ const SettingsSelector = (): JSX.Element => {
         {/* Language */}
         <LanguageSelect language={selectedLanguage} onChange={setLanguage} />
 
+        {/* Cancel button */}
+        <button onClick={handleCancel}>Cancel</button>
         {/* Close button */}
-        <button onClick={handleClose}>Close</button>
+        <button onClick={handleSave}>Save</button>
       </Modal>
     </div>
   );
