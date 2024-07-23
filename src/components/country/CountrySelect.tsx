@@ -1,5 +1,5 @@
 import countries from "i18n-iso-countries";
-import Select, { SingleValue } from "react-select";
+import Select from "react-select";
 import { CountrySelectOption } from "./CountrySelectOption";
 
 // Register countries

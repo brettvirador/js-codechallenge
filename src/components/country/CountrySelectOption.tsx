@@ -1,7 +1,8 @@
 import { OptionProps, components } from "react-select";
 import { CountrySelectData } from "./CountrySelect";
+import "./CountrySelectOption.styles.css";
 
-/* --- [TASK] ---
+/* --- [TASK: DONE] ---
 Country flags in select field
 
 CURRENT SCENARIO
@@ -24,9 +25,19 @@ FURTHER DETAILS
 export const CountrySelectOption = (
   props: OptionProps<CountrySelectData, false>
 ) => {
+  const { children, ...rest } = props;
+  const { code, name } = props.data.value;
+
   return (
-    <div>
-      <components.Option {...props} />
-    </div>
+    <components.Option {...rest}>
+      <div className="country-select-option-inner">
+        <img
+          className="country-select-option-image"
+          src={`https://catamphetamine.gitlab.io/country-flag-icons/3x2/${code}.svg`}
+          alt={name}
+        />
+        <span>{children}</span>
+      </div>
+    </components.Option>
   );
 };
