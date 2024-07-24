@@ -27,7 +27,7 @@ const CurrencySelect = ({
 
   // Render
   return (
-    <div>
+    <div className="form-control">
       <label>
         Currency
         <Select

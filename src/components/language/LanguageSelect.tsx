@@ -36,7 +36,7 @@ const LanguageSelect = ({
 
   // Render
   return (
-    <div>
+    <div className="form-control">
       <label>
         Language
         <Select

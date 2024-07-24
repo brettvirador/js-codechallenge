@@ -1,4 +1,4 @@
-import React, { useMemo, useReducer, useRef, useState } from "react";
+import React, { useMemo, useReducer, useRef } from "react";
 import Modal from "react-modal";
 import CountrySelect, {
   CountrySelectValue,
@@ -12,6 +12,7 @@ import CurrencySelect, {
   CurrencySelectValue,
   DEFAULT_CURRENCY,
 } from "../currency/CurrencySelect";
+import "./SettingsSelector.styles.css";
 
 /* --- [TASK: DONE] ---
 Changes on modal are only applied on SAVE
@@ -45,7 +46,7 @@ FURTHER DETAILS
 - Be aware that #1 changes some relevant behaviour for this task
 --- [TASK] --- */
 
-/* --- [TASK] ---
+/* --- [TASK: DONE] ---
 Improved layout and styling of modal dialog (CSS)
 
 CURRENT SCENARIO
@@ -87,7 +88,7 @@ OPTIONAL BONUS
 - Replace `any` in the `*.stories.tsx`  files with appropriate types.
 --- [TASK] --- */
 
-/* --- [TASK] ---
+/* --- [TASK: DONE] ---
  ReactDOM.render is no longer supported
 
 CURRENT SCENARIO
@@ -189,7 +190,15 @@ const SettingsSelector = (): JSX.Element => {
 
     /* Button */
     return (
-      <button onClick={handleOpen}>
+      <button className="btn btn-primary" onClick={handleOpen}>
+        <img
+          src={`https://catamphetamine.gitlab.io/country-flag-icons/3x2/${finalValues.country.code}.svg`}
+          alt={finalValues.country.name}
+          style={{
+            aspectRatio: 16 / 9,
+            width: "2rem",
+          }}
+        />
         {finalValues.country.name} - ({finalValues.currency} -{" "}
         {finalValues.language})
       </button>
@@ -202,38 +211,103 @@ const SettingsSelector = (): JSX.Element => {
       {button}
 
       {/* Modal */}
-      <Modal isOpen={modalIsOpen}>
+      <Modal
+        className="modal"
+        overlayClassName="modal-overlay"
+        isOpen={modalIsOpen}
+      >
         {/* Header */}
-        <h2>Select your region, currency and language.</h2>
+        <h2 className="modal-header">
+          Select your region, currency and language.
+        </h2>
 
-        {/* Country */}
-        <CountrySelect
-          value={selectedValues.country}
-          onChange={(value) =>
-            dispatchSelectedValues({ type: "SET_COUNTRY", payload: value })
-          }
-        />
+        <div className="modal-body">
+          {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates
+          quis expedita labore unde deserunt commodi atque ipsum sapiente alias
+          laboriosam, natus corrupti molestias adipisci placeat tempora dolorum
+          dolor ex tempore! Lorem ipsum dolor sit amet consectetur adipisicing
+          elit. Voluptates quis expedita labore unde deserunt commodi atque
+          ipsum sapiente alias laboriosam, natus corrupti molestias adipisci
+          placeat tempora dolorum dolor ex tempore! Lorem ipsum dolor sit amet
+          consectetur adipisicing elit. Voluptates quis expedita labore unde
+          deserunt commodi atque ipsum sapiente alias laboriosam, natus corrupti
+          molestias adipisci placeat tempora dolorum dolor ex tempore! Lorem
+          ipsum dolor sit amet consectetur adipisicing elit. Voluptates quis
+          expedita labore unde deserunt commodi atque ipsum sapiente alias
+          laboriosam, natus corrupti molestias adipisci placeat tempora dolorum
+          dolor ex tempore! Lorem ipsum dolor sit amet consectetur adipisicing
+          elit. Voluptates quis expedita labore unde deserunt commodi atque
+          ipsum sapiente alias laboriosam, natus corrupti molestias adipisci
+          placeat tempora dolorum dolor ex tempore! Lorem ipsum dolor sit amet
+          consectetur adipisicing elit. Voluptates quis expedita labore unde
+          deserunt commodi atque ipsum sapiente alias laboriosam, natus corrupti
+          molestias adipisci placeat tempora dolorum dolor ex tempore! Lorem
+          ipsum dolor sit amet consectetur adipisicing elit. Voluptates quis
+          expedita labore unde deserunt commodi atque ipsum sapiente alias
+          laboriosam, natus corrupti molestias adipisci placeat tempora dolorum
+          dolor ex tempore! Lorem ipsum dolor sit amet consectetur adipisicing
+          elit. Voluptates quis expedita labore unde deserunt commodi atque
+          ipsum sapiente alias laboriosam, natus corrupti molestias adipisci
+          placeat tempora dolorum dolor ex tempore! Lorem ipsum dolor sit amet
+          consectetur adipisicing elit. Voluptates quis expedita labore unde
+          deserunt commodi atque ipsum sapiente alias laboriosam, natus corrupti
+          molestias adipisci placeat tempora dolorum dolor ex tempore! Lorem
+          ipsum dolor sit amet consectetur adipisicing elit. Voluptates quis
+          expedita labore unde deserunt commodi atque ipsum sapiente alias
+          laboriosam, natus corrupti molestias adipisci placeat tempora dolorum
+          dolor ex tempore! Lorem ipsum dolor sit amet consectetur adipisicing
+          elit. Voluptates quis expedita labore unde deserunt commodi atque
+          ipsum sapiente alias laboriosam, natus corrupti molestias adipisci
+          placeat tempora dolorum dolor ex tempore! Lorem ipsum dolor sit amet
+          consectetur adipisicing elit. Voluptates quis expedita labore unde
+          deserunt commodi atque ipsum sapiente alias laboriosam, natus corrupti
+          molestias adipisci placeat tempora dolorum dolor ex tempore! */}
+          <div className="form-group">
+            {/* Country */}
+            <CountrySelect
+              value={selectedValues.country}
+              onChange={(value) =>
+                dispatchSelectedValues({
+                  type: "SET_COUNTRY",
+                  payload: value,
+                })
+              }
+            />
 
-        {/* Currency */}
-        <CurrencySelect
-          value={selectedValues.currency}
-          onChange={(value) =>
-            dispatchSelectedValues({ type: "SET_CURRENCY", payload: value })
-          }
-        />
+            {/* Currency */}
+            <CurrencySelect
+              value={selectedValues.currency}
+              onChange={(value) =>
+                dispatchSelectedValues({
+                  type: "SET_CURRENCY",
+                  payload: value,
+                })
+              }
+            />
 
-        {/* Language */}
-        <LanguageSelect
-          language={selectedValues.language}
-          onChange={(value) =>
-            dispatchSelectedValues({ type: "SET_LANGUAGE", payload: value })
-          }
-        />
+            {/* Language */}
+            <LanguageSelect
+              language={selectedValues.language}
+              onChange={(value) =>
+                dispatchSelectedValues({
+                  type: "SET_LANGUAGE",
+                  payload: value,
+                })
+              }
+            />
+          </div>
+        </div>
 
-        {/* Cancel button */}
-        <button onClick={handleCancel}>Cancel</button>
-        {/* Close button */}
-        <button onClick={handleSave}>Save</button>
+        <div className="modal-footer">
+          {/* Cancel button */}
+          <button className="btn" onClick={handleCancel}>
+            Cancel
+          </button>
+          {/* Close button */}
+          <button className="btn btn-primary" onClick={handleSave}>
+            Save
+          </button>
+        </div>
       </Modal>
     </div>
   );

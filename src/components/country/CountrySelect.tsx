@@ -49,7 +49,7 @@ export const CountrySelect = ({
 
   // Render
   return (
-    <div>
+    <div className="form-control">
       <label>
         Country
         <Select
